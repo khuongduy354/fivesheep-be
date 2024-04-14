@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { supabase } from "../helper/supabase";
+import { getQuestionDataset } from "../helper/mongo";
 
 const updateWool = async (req: Request, res: Response) => {
   const { wool } = req.body;
@@ -56,9 +57,15 @@ const getLessons = async (req: Request, res: Response) => {
     } else {
       data.push(lessons[0]);
     }
-    return res.status(200).json({ lessons: data });
+
+    // get mongodb data set here
+    const dataset = await getQuestionDataset(0, data.length - 1);
+
+    return res
+      .status(200)
+      .json({ lessons_meta_data: data, lessons_dataset: dataset });
   } else if (q === "learnt") {
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("LessonLearnt")
       .select(
         `
@@ -66,8 +73,14 @@ const getLessons = async (req: Request, res: Response) => {
       `
       )
       .eq("user_id", req.user.id);
+
+    if (!data) data = [];
     if (error) return res.status(400).json({ error: error.message });
-    return res.status(200).json({ lessons: data });
+
+    const dataset = await getQuestionDataset(0, data.length - 1);
+    return res
+      .status(200)
+      .json({ lessons_metadata: data, lessons_dataset: dataset });
   }
 };
 const learntLesson = async (req: Request, res: Response) => {
