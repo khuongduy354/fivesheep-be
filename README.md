@@ -12,3 +12,10 @@ GET /me/lessons?q=learnt|all   # get learnt lessons or all (upto unlocked)  less
 POST /attack/   # return an attack type
 
 POST /attack/attacked # cb after attacked
+
+# Tech Stack 
+
+React
+Nodejs 
+MongoDB 
+PostgresSQL
