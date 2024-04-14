@@ -22,3 +22,9 @@ Nodejs
 MongoDB 
 
 PostgresSQL
+
+# Build from source 
+
+`npm install`
+
+`npm run dev`
